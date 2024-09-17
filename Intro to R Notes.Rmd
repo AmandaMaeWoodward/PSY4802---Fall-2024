@@ -1,8 +1,0 @@
----
-title: "Intro to R Notes"
-author: "Amanda Mae Woodward"
-date: "2024-09-12"
-output: html_document
----
-
-This is where our notes will go! 
