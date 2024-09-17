@@ -43,6 +43,10 @@ text goes outside
 ```
 
 ```{r}
+
+```
+
+```{r}
 # code -> insert chunk
 # Mac: command + option + i 
 # pc: control + alt+i
@@ -57,37 +61,39 @@ R can be treated like a big fancy calculator (think scientific calculators you m
 
 #### Addition
 ```{r}
-
+5+5
 ```
 
 #### Subtraction
 
 ```{r}
-
+10-2
 ```
 
 #### Multiplication
 
 ```{r}
-
+7*7
 ```
 
 #### Division
 
 ```{r}
-
+20/2
 ```
 
 #### Square Root
 `sqrt()`
 ```{r}
+sqrt(64)
 
+sqrt(9532)
 ```
 
 #### Exponent
 
 ```{r}
-
+6^4
 ```
 
 **Important:** In terms of calculations, R follows PEMDAS (algebra throwback). Parentheses are going to be **Really** important.
@@ -95,7 +101,8 @@ R can be treated like a big fancy calculator (think scientific calculators you m
 #### More complicated Math:
 
 ```{r}
-
+3+2 *8
+(((3+2)))*8
 ```
 
 ### Logical Statements
@@ -113,24 +120,24 @@ If this sentence was a fact, R would output the word "TRUE." If it was not true,
 To assess whether logical statements in R are true, we use two equal signs `==`. The above example would look something like this:
 
 ```{r}
-
+"Michael Scott" == "good manager"
 ```
 
 Running this code tells us the statement is false. (**Note**: this is because the phrase on the left is not the same as the one on the right..as far as I know, R hasn't watched *the Office*).
 ```{r}
-
+"Michael Scott" == "Michael Scott"
 ```
 
 However, R can compute mathematical expressions. This means we can look at something like this:
 
 ```{r}
-
+8 == 7
 ```
 
 You can also evaluate if statements are **NOT** True. We can do this by using the symbol `!=` For instance, I could evaluate Michael Scott as a manager by writing:
 
 ```{r}
-
+"Michael Scott" != "good manager"
 ```
 
 Note: In other words, == is similar to "is" and != is similar to "is not"
@@ -141,10 +148,10 @@ A similar process can be used to determine if something is greater than, less th
 Examples:
 
 ```{r}
- #greater than
- #less than 
-#greater than or equal to
- #less than or equal to
+5 > 3 #greater than
+5 < 3 #less than 
+5 >= 3#greater than or equal to
+5 <= 3 #less than or equal to
 ```
 
 We can also make logical statements more complex by creating **and** and **or** statements.(And- both things need to be true Or- only one has to be true)
@@ -152,32 +159,35 @@ We can also make logical statements more complex by creating **and** and **or** 
 And statements use `&` OR `&&` (if you have more things to evaluate)
 
 ```{r}
+8 > 2 & 3< 2
 
+7 < 3 && 3>1 && 4>5
 ```
 
 Or statements use `|` OR `||` (if you have more things to evaluate)
 
 ```{r}
-
+3*4> 2 | 3<2
 ```
 
 ##### Learning Outcome 1 Practice:
 
 1.  Find the square root of 89
 ```{r}
-
+sqrt(89)
 ```
 
 2.  Determine if 3 raised to the 5 power is greater than the square root of ten thousand
 
 ```{r}
  #no commas
+3^5 > sqrt(10000)
 ```
 
 3.  Determine if 5 times 7 is less than or equal to 30 or if 4*8 is equal to 32
 
 ```{r}
-
+5*7 <= 30 | 4*8==32
 ```
 
 ### Learning Outcome 2: Describe how to use common R functions
@@ -190,27 +200,34 @@ The first one we'll talk about is `:`. Typically, it would be used by writing sm
 
 ```{r}
 #"first number: second number"
+1:7
+7:1
+-100:999
 
 ```
 
 `rep()` allows you to repeat something a set number of times. Looking at the help file, we can see the arguments contained in the function. To use it, we write `rep(thingToBeRepeated, #ofTimes)`.
 
 ```{r}
-
+rep("hi", 10)
+rep(1,2)
 ```
 
 **Note:** For functions, you can either write arguments in the order listed in the help file (not labelled), or make sure you include the argument label.
 
 ```{r}
-
+rep(times= 3, x= "hi")
 ```
 
 `seq()` gives you a sequence of numbers. typically, we use it by writing
 `seq(lowest#, highest#, by=#)`.
 
 ```{r}
-
+seq(0, 100, by= 5)
+seq(1,100, by=5)
+seq(5,100, by=5)
 ```
+
 
 #### Learning Outcome 2 Practice:
 
