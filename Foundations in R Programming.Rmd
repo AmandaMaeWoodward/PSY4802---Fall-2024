@@ -234,24 +234,29 @@ seq(5,100, by=5)
 1.  Print every 5th number between 1 and 100.
 
 ```{r}
+print(seq(1,100, by = 5))
 
+seq(1,100, by=5)
 ```
 
 2.  Use code to write I love statistics 4 times.
 
 ```{r}
-
+rep(times=4, x="I love statistics")
+rep("I love statistics", 4)
 ```
 
 3.  Repeat the numbers 1-10 twice
 
 ```{r}
-
+rep(1:10, 2)
+rep(times=2, seq(1,10))
 ```
 
 4.  Print every 3rd number from 1-20 3 times.
 ```{r}
-
+rep(seq(1,20, by=3), 3)
+rep(times =3, x= seq(1,20, by =3))
 ```
 
 ###Learning Outcome 3: Explain the differences between variables, vectors, and dataframes
@@ -276,7 +281,8 @@ Naming conventions: I was taught to use all lower case for the first word, and c
 Variables store one thing in R (it can be a number, a word, or whatever you want)
 
 ```{r}
-
+iceCream<- "chocolate"
+luckyNumber<- 13
 ```
 
 *Aside: `c()` means combine. you can put stuff in parentheses and use a comma to separate it and have it print together
@@ -290,40 +296,43 @@ function- `c()`.
 
 ```{r}
 "numeric"
-
+awake <- c(8,8,-3,4,6)
 "character"
-
+tvShows <- c("suits", "new girl", "below deck", "naruto", "secret lives of mormon wives")
+tvShows2<- c("suits, new girl, below deck, naruto, secret lives of mormon wives")
 ```
 
 If you want to call one of the things you saved in a vector, you can
 write `vectorName[position of thing]`
 
 ```{r}
-
+tvShows[5]
+tvShows
 ```
 
 **Dataframes** Data frames are made from multiple vectors. There are preloaded datasets in R we can use to practice, such as mtcars:
 
 ```{r}
-
+data(mtcars)
 ```
 
 ### Practice: 
 
 1)Make a vector with 6 animals
 ```{r}
-
+animals<- c("possum", "elephant","dinosaur","shrew", "sloth", "giraffe" )
 ```
 2)Make a vector of the number of cookies you think each animal could eat
 ```{r}
-
+cookiesEaten<- c(1.5, 500, 18, .5, 10, 75)
 ```
 
 We can also combine vectors into a dataframe using R functions
 (`cbind.data.frame()` or `rbind.data.frame()`). We'll use the vectors we made above as an example.
 
 ```{r}
-
+cookieDat<-cbind.data.frame(animals, cookiesEaten)
+cookieRows<- rbind.data.frame(animals,cookiesEaten)
 ```
 
 Just like you can pick one thing in a vector, you can select one column or one row in a dataframe. You can use brackets like we did with vectors, but you need to specify whether it's a row or a column. If it's
@@ -331,13 +340,18 @@ a column, you can write `dataframe[,column#]` and you can use
 `dataframe[row#,]`.
 
 ```{r}
+cookieDat[3,1] #specific animal
 
+cookieDat[,1] #all animal names 
+
+cookieDat[4,]
 ```
 
 You can also get columns by using a `$`.
 
 ```{r}
-
+cookieDat$cookiesEaten
+cookieDat$animals
 ```
 
 #### Learning Outcome 3 Practice:
@@ -345,37 +359,38 @@ You can also get columns by using a `$`.
 1.  Create a variable that contains your favorite ice cream flavor
 
 ```{r}
-
+favFlavor<- "pistachio"
 ```
 
 2.  Create two vectors: 1 vector should contain the names of four TV shows and the 2nd vector should contain your ratings for those shows
 
 ```{r}
-
+myTVShows<- c("new girl", "suits", "arrested development", "community")
+myTVRatings<- c(10,7,9.5,10)
 ```
 
 3.  Make these vectors into a data frame.
 
 ```{r}
-
+tvShowDat<- cbind.data.frame(myTVShows, myTVRatings)
 ```
 
 4.  Print the information in the 2nd row.
 
 ```{r}
-
+tvShowDat[2,]
 ```
 
 5.  Print the information in the 2nd column.
 
 ```{r}
-
+tvShowDat[,2]
 ```
 
 Bonus: Print the information in the 3rd row, 1st column.
 
 ```{r}
-
+tvShowDat[3,1]
 ```
 
 ###Learning Outcome 4: Explain how to obtain a subset of your data
