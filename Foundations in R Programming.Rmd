@@ -403,8 +403,11 @@ portion of the data.
 For instance, we could use indexing to get only cars in the mtcars dataset with 4 gears.
 
 ```{r}
+mtcars[mtcars$gear==4,]
 
+fourthGear<- mtcars[mtcars$gear==4,]
 ```
+
 
 In this case, you'll notice that I put a comma after the logical statement. This is because we want all of the **rows** where the car has 4 gears.
 
