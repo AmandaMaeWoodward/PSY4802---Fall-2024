@@ -404,7 +404,6 @@ For instance, we could use indexing to get only cars in the mtcars dataset with 
 
 ```{r}
 mtcars[mtcars$gear==4,]
-
 fourthGear<- mtcars[mtcars$gear==4,]
 ```
 
