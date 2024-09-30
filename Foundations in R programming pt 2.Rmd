@@ -23,28 +23,64 @@ We'll keep talking about dataframes throughout the semester, but there are some 
 
 Last time, we talked about how you can compute descriptive statistics on specific variables by using `dataframe$name`. what do you do if you don't remember the name of a variable? 
 
+```{r}
+data(mtcars)
+#mtcars$
+```
+
+
 You could print the dataframe repeatedly, but it's tedious. Here are some functions you can use to find the column names:
+```{r}
+mtcars
+```
 
 We'll use diamonds to learn about: `colnames()`, `names()`, and 0 row
 ```{r}
+library(ggplot2)
+data(diamonds)
+
+colnames(diamonds) #get all column names
+names(diamonds)
+diamonds[0,]
 
 ```
 
 ### editing column names 
 `colnames()` returns all of the column names in a vector. So we can get column names using indexing as well. 
 ```{r}
-
+colnames(diamonds)[3]
+diamonds[0,4]
 ```
 
 It **also** means that you can change names if necessary (when we talk about dataframe manipulation next week, this can become important.)
 `colnames(data)[position]`
 ```{r}
+colnames(diamonds)[3]<- "COLOR"
+colnames(diamonds)
 
+colnames(diamonds)[3]<- "color"
+colnames(diamonds)
 ```
 
-More often than not, we're using datasets that we either created or received from collaborators. That means that you may be dealing with problems **past you** graciously left you, different naming conventions, or even needing to manipulate variables that combine information. We'll talk about how to fix some of the more involved ones next week. For now, ones that may be helpful are making sure your column names are all lower case or all upper case. You can do this with the toupper and tolower functions:
+More often than not, we're using datasets that we either created or received from collaborators. That means that you may be dealing with problems **past you** graciously left you, different naming conventions, or even needing to manipulate variables that combine information. We'll talk about how to fix some of the more involved ones next week. For now, ones that may be helpful are making sure your column names are all lower case or all upper case. You can do this with the `toupper()` and `tolower()` functions:
 
 ```{r}
+data(ChickWeight)
+
+toupper("whY aRe yoU YelLinG")
+tolower("IM NOT")
+```
+
+```{r}
+colnames(ChickWeight)<- tolower(colnames(ChickWeight))
+colnames(ChickWeight)
+
+ChickWeight$time
+
+colnames(ChickWeight)<- toupper(colnames(ChickWeight))
+colnames(ChickWeight)
+
+colnames(ChickWeight)<- tolower(colnames(ChickWeight))
 
 ```
 
@@ -54,39 +90,48 @@ dataframe$newColumn<- whatever you're assigning
 
 For instance, if you want to add a blank column:
 ```{r}
-
+diamonds$size<- NA 
+diamonds$sizeTwo<- 999
 ```
 Then you can fill it with whatever information you want. 
 ```{r}
-
+diamonds$size<- "big"
+diamonds$size<- rep(c("big", "small"), nrow(diamonds)/2) 
 ```
 or you can fill the new column in based on other data in the dataframe
 ```{r}
-
+diamonds$size<- diamonds$carat
+library(tidyverse)
+diamonds %>% 
+  select(carat,size)
 ```
 can do math to fill in the columns
 ```{r}
-
+diamonds$size[diamonds$carat>1]<- "big" 
+diamonds$size[diamonds$carat<=1]<- "small"
 ```
 
 #### Learning Outcome 1 Practice: 
 
 1. Change all of the column names in mtcars to capital letters
 ```{r}
-
+colnames(mtcars)<- toupper(colnames(mtcars))
+colnames(mtcars)
 ```
 2. Change the name of the 9th column to reflect the values in the am column description
 ```{r}
-
+colnames(mtcars)[9]<- "transmission"
+colnames(mtcars)
 ```
 
 3. Change the 4th column name to all lowercase letters 
 ```{r}
-
+colnames(mtcars)[4]<- tolower(colnames(mtcars)[4])
+colnames(mtcars)
 ```
 
 ```{r}
-
+colnames(mtcars)<- tolower(colnames(mtcars))
 ```
 
 ## Learning Outcome 2: Explain different classes of variables and how to change the class
@@ -106,36 +151,58 @@ We talked about this a little bit last week, but there are different classes (ty
 
 You can check the class of your data using `class()`
 ```{r}
-
+class(diamonds$carat)
+class(mtcars$transmission)
 ```
 
 If you want to change the class of your variable, you can assign `as.Preferredclass(dataframe$column)` to the column name
 
 ```{r}
 "is.classname"
-
+is.factor(mtcars$transmission)
 "as.classname"
-
 #make a new column 
+mtcars$transmission2<-as.factor(mtcars$transmission)
 
+class(mtcars$transmission)
+class(mtcars$transmission2)
 ```
 **DOUBLE CHECK YOUR DATA**
+```{r}
+mtcars$transmission<-factor(mtcars$transmission)
+is.factor(mtcars$transmission)
+```
 
 ### Learning Outcome 2 Practice:
 1. Check the class of the horsepower column (hp) 
 ```{r}
-
+class(mtcars$hp)
 ```
 
 2. Change the class of horsepower to a factor
 ```{r}
-
+mtcars$hp2<- factor(mtcars$hp)
+mtcars$hp2<- as.factor(mtcars$hp) #both are ok to use
 ```
 
 3. Look at summaries of horsepower as a factor and as a number. What do you notice? 
 ```{r}
-
+summary(mtcars$hp)
+summary(mtcars$hp2)
 ```
+
+### a warning 
+```{r}
+"double check data"
+mtcars$hp2
+mtcars$hp3<- as.numeric(mtcars$hp2)
+mtcars$hp3
+
+# take into account levels when switching to numeric 
+as.numeric(levels(mtcars$hp2)[mtcars$hp2])
+mtcars$hp
+```
+
 
 ## Learning Outcome 3: Create your own function
 
@@ -152,47 +219,57 @@ You can make a simple function that adds two to a set of numbers
 Before we make the function, we'll make a vector of numbers (1-10) as our input
 
 ```{r}
-
+numbers<- 1:10
 ```
 
 then, we'll name our function addTwo and give it one argument or input
 
 ```{r}
-
+addTwo <- function(number){
+  number + 2
+}
 ```
 if we run this correctly, it should show up in the environment (top right). 
 
 Then, we can use our function to add two to our vector:
 
 ```{r}
-
+addTwo(numbers)
 ```
 
 One thing to note- anything you make in a function **stays in the function.** If you want to save it to a dataframe, you treat your new function just like any other R function (i.e. you need to assign the output to a column or variable)
 
 ```{r}
 "dataframe$column <- function"
+plusTwo<- addTwo(numbers)
 
+test<- data.frame(numbers)
+test$plusTwo<- addTwo(test$numbers)
 ```
 
 ## Practice:
 function to multiply by 7
 ```{r}
-
+multiplySeven<- function(banana){
+  banana*7
+}
 ```
 test it out
 ```{r}
-
+multiplySeven(numbers)
+test$timesSeven<- multiplySeven(numbers)
 ```
 
 **my favorite is**
 `paste()`
 ```{r}
-
+favoriteThings<- function(thing){
+  paste("my favorite is", thing)
+}
 ```
 test
 ```{r}
-
+favoriteThings("green tea")
 ```
 
 ### Multiple argument functions
@@ -200,7 +277,18 @@ test
 We can make functions with more than one argument. For instance we could multiply all of the numbers in our original vector by a second vector 10-1
 
 ```{r}
+backwards<- 10:1
+backwards
+```
 
+```{r}
+multiplyBy<- function(number1, number2){
+  number1*number2
+}
+```
+
+```{r}
+multiplyBy(numbers,backwards)
 ```
 
 ### Learning Outcome 3 Practice
@@ -233,17 +321,22 @@ Let's say we wanted to create a column in the chickweight dataset that indicated
 
 We'd have to make a new column
 ```{r}
+# 10 and below is "beginning"
+#12 and above is "end"
+
+ChickWeight$timePoint<- NA
 
 ```
 and then fill in that new column by indexing the days column, which has 12 different days. 
 ```{r}
-
+ChickWeight$timePoint[ChickWeight$time<=10]<- "beginning"
+ChickWeight$timePoint[ChickWeight$time>10]<- "end"
 ```
 
 We could use a **for loop** though to go through each row of the data set and fill out the new column (beginning or end) based on the days in the Time column.
 
 to make a for loop: 
-for (individual in bigger group){
+for(individual in bigger group){
 thing you want to happen. 
 }
 
@@ -255,12 +348,11 @@ for (i in ChickWeight){
 think we want to do
 }
 
-Here, I'm going to fill in the other parts as code: 
-ifelse(logical statment, "TRUE", "FALSE")
-
-
 ```{r}
-
+ChickWeight$timePoint2<- NA
+for(i in 1:nrow(ChickWeight)){
+  ChickWeight$timePoint2[i]<-ChickWeight$time[i] <= 10
+}
 ```
 
 ### Practice for Learning Outcome 4: 
