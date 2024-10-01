@@ -295,22 +295,28 @@ multiplyBy(numbers,backwards)
 
 1. Make a function that divides numbers by 100. 
 ```{r}
-
+lickitySplit<- function(x){
+  x/100
+}
 ```
 
 2. Test your function on the mtcars mpg column.
 ```{r}
-
+lickitySplit(mtcars$mpg)
 ```
 
 3. Make a function that finds the mean of a column and divides it by the standard deviation of another column.
 ```{r}
-
+meanOverSd<- function(col1,col2){
+  mean(col1)/sd(col2)
+}
 ```
 
 4. Test it on the mpg column and hp column. 
 ```{r}
-
+class(mtcars$mpg)
+class(mtcars$hp)
+meanOverSd(mtcars$mpg,mtcars$hp)
 ```
 
 ## Learning Outcome 4: Create your own for loop
@@ -336,7 +342,7 @@ ChickWeight$timePoint[ChickWeight$time>10]<- "end"
 We could use a **for loop** though to go through each row of the data set and fill out the new column (beginning or end) based on the days in the Time column.
 
 to make a for loop: 
-for(individual in bigger group){
+for(individual in 1:end of bigger group){
 thing you want to happen. 
 }
 
@@ -353,18 +359,42 @@ ChickWeight$timePoint2<- NA
 for(i in 1:nrow(ChickWeight)){
   ChickWeight$timePoint2[i]<-ChickWeight$time[i] <= 10
 }
+ChickWeight$timePoint2[ChickWeight$timePoint2=="TRUE"]<- "early"
+ChickWeight$timePoint2[ChickWeight$timePoint2=="FALSE"]<- "later"
+
 ```
 
 ### Practice for Learning Outcome 4: 
 
 1. Create a for loop that will multiply each number in a vector by 4. Test it with a vector containing the numbers 10:100. 
 ```{r}
+for(i in 10:100){
+  print(i*4)
+}
+
+testone<- 10:100
+testOutput<-rep(NA, length(testone))
+for(i in 1:length(testone)){
+  testOutput[i]<-testone[i]*4
+}
+
+test<-cbind.data.frame(testone, testOutput)
+for(i in 1:nrow(test)){
+  test$testOutput[i]<-test$testone[i]*4
+}
 
 ```
 
 2. Create a new column in the mtcars data set that indicated whether a car has good mileage (over 25 mpg) or bad mileage (25 mpg or fewer).  
 ```{r}
+colnames(mtcars)
+#step 1: create a new column 
+mtcars$goodMileage<- NA
+#step 2: start for loop
 
+for(i in 1:nrow(mtcars)){ #can use length(mtcars$mpg)
+  mtcars$goodMileage[i]<- mtcars$mpg[i]> 25
+}
 ```
 
 ## Learning Outcome 5: Create your own if statements and ifelse statments
@@ -380,14 +410,20 @@ what you want to happen
 
 Let's try one: in this case, we'll make an if statement to milage
 ```{r}
-
+mtcars$goodMileage2<- NA
+if(mtcars$mpg[1]>25){
+  print("goodmileage")
+}
 ```
 ### else statement
 ```{r}
 
-```
-
-```{r}
+mtcars$goodMileage2<- NA
+for(i in 1:nrow(mtcars)){ #can use length(mtcars$mpg)
+   if(mtcars$mpg[i]>25){
+  mtcars$goodMileage2[i]<-"good Mileage"  
+  } else{mtcars$goodMileage2[i]<-"bad mileage"}
+}
 
 ```
 
@@ -400,7 +436,7 @@ R lets you combine if/else statements into a single function, ifelse().
 
 We can use this to accomplish the same thing we did above:
 ```{r}
-
+mtcars$mpg3<- ifelse(mtcars$mpg>25,"good mileage", "bad mileage")
 ```
 
 ### Learning Outcome 5 Practice: 
