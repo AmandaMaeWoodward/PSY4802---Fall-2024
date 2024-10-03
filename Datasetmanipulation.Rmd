@@ -13,7 +13,7 @@ By the end of this class, students should be able to:
 - Use functions to clean data
 - Use pipes to clean data
 
-We've **already**started manipulating datasets in R. We've talked about how to add columns, how to fill those columns with indexing or for loops, and how to subset data. Today, we'll go through a few other ways to manipulate datasets. But first, we need to go through adding data to R. After all, you aren't going to be using built in data to write your papers.
+We've **already** started manipulating datasets in R. We've talked about how to add columns, how to fill those columns with indexing or for loops, and how to subset data. Today, we'll go through a few other ways to manipulate datasets. But first, we need to go through adding data to R. After all, you aren't going to be using built in data to write your papers.
 
 Uploading data is one of the few things I use a "point and click" method for. Partially, because the point and click method allows you to check if your data are uploading the way you want them to. Today, we'll be using a .csv file, but you can upload other sorts of files. 
 
@@ -22,13 +22,19 @@ You'll want to press the "import dataset" button above your global environment. 
 Once you press okay, you'll see your dataset pop up in the console below. You should move it to your .Rmd file and name it however you'd like. I have a tendency to use "dat", though it's not the most informative. Feel free to use your own name, but remember that whatever you call it here is how you'll refer to it for the rest of the lesson. 
 
 ```{r}
+library(readr)
+aggressionData<- read_csv("PSY4802-AggressionSampleData.csv")
 
+#aggressionData <- read.csv("~/Desktop/PSY4802 - Fall 2024/PSY4802-AggressionSampleData.csv")
+
+# dat<- read.csv()
 ```
 getting/setting wd
 ```{r}
-
+getwd()
+setwd(dir = "~/Desktop")
+setwd(dir="/Users/Amanda 1 2/Desktop/PSY4802 - Fall 2024")
 ```
-
 
 ### Learning Outcome #1: Transform wide data to long
 There are many **many** ways to transform data from wide to long and vice versa. Sometimes, the version you pick is based on what other data you have. 
@@ -45,21 +51,25 @@ As mentioned above, the current data are in wide format. We can change this to l
 **pivot_longer**
 I think this is the easiest version to use. We'll need to use the "tidyverse" library. 
 ```{r}
-
+library(tidyverse)
 ```
 `pivot_longer()` uses the following structure: 
 `pivot_longer(dataframe, columns containing wide data, names_to, values_to)`
 names_to: specifies what you'd like to call the column that contains the previous column names
 values_to: specifies the name of the column where the scores go
 ```{r}
+aggressionLong<- pivot_longer(aggressionData, c("baselineAggression", "postAggression"), names_to="timePoint", values_to= "aggressionScore")
 
+aggressionLongA<- aggressionData %>%
+  pivot_longer(c("baselineAggression","postAggression"), names_to= "timePoint",values_to="aggressionScore")
+# colnames(aggressionData)
 ```
 **Note:** remember to save the data to your environment. 
 
 #### Learning Outcome 1 Practice
 1. Open the relig_income dataset.
 ```{r}
-
+data("relig_income")
 ```
 
 2. Restructure the dataset so that it is in long format. 
