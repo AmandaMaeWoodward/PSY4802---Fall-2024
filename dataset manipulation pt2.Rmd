@@ -1,0 +1,60 @@
+---
+title: "Dataset manipulation pt 2"
+author: "Amanda Mae Woodward"
+date: "2024-10-15"
+output: html_document
+---
+
+We're going to use this part of class to review how to do the learning outcomes from the dataset manipulation notes. 
+
+### load data
+1. Open the palmerpenguins library
+```{r}
+
+```
+
+2. Open the penguins dataset
+```{r}
+
+```
+
+3. Explore the raw dataset. What can you find out about it? 
+
+4. Are the data in long or wide format? 
+
+5. let's practice going from one format to the other. 
+
+6. create two datsets. One should have the individual id, region, and island. The other should have individual id, species, flipper length, culmen length, culmen depth, and body mass. 
+
+```{r}
+
+```
+
+7. Join the two datasets you made together.
+```{r}
+
+```
+
+8. Separate the species column into the common name and the scientific name 
+```{r}
+
+```
+
+9. change the levels of clutch completion to indicate whether the penguin has two eggs or does not have two eggs
+
+```{r}
+
+```
+
+10. create a column that has body mass in kilograms.
+
+```{r}
+
+```
+
+11. copy island to a new column. Recode this variable so that each island is renamed to be just the first initial
+
+```{r}
+
+```
+
