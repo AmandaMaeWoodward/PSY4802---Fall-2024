@@ -10,34 +10,72 @@ We're going to use this part of class to review how to do the learning outcomes 
 ### load data
 1. Open the palmerpenguins library
 ```{r}
-
+library(palmerpenguins)
+#remotes::install_github("allisonhorst/palmerpenguins")
 ```
 
 2. Open the penguins dataset
 ```{r}
-
+data(penguins)
 ```
 
 3. Explore the raw dataset. What can you find out about it? 
+look in the help file; we agree that penguins dataset looks better 
 
 4. Are the data in long or wide format? 
 
-5. let's practice going from one format to the other. 
+```{r}
+summary(as.factor(penguins_raw$`Sample Number`))
+summary(as.factor(penguins_raw$Species))
+summary(as.factor(penguins_raw$`Individual ID`)) #this is what we'll use 
+```
 
-6. create two datsets. One should have the individual id, region, and island. The other should have individual id, species, flipper length, culmen length, culmen depth, and body mass. 
+
+5. let's practice going from one format to the other. 
+long to wide: 
+
+using flipper length as the variable
+```{r}
+library(tidyverse)
+
+tinyPenguin<- penguins_raw %>% select("Individual ID","Sample Number", "Flipper Length (mm)")
+```
+Note: individual id is not nested within sample number. we can still run this code, but it's gonna be messy. (making data messier is a thing we can do- just not normally the goal)
+```{r}
+tinyPenguinWide <- pivot_wider(tinyPenguin, id_cols = "Individual ID",names_from= "Sample Number", values_from=  "Flipper Length (mm)") 
+
+tinyPenguinWide <- tinyPenguin %>% pivot_wider(id_cols = "Individual ID",names_from= "Sample Number", values_from=  "Flipper Length (mm)") 
+
+tinyPenguin2<- spread(penguins_raw, key= "Sample Number", value = "Flipper Length (mm)")
+```
+
 
 ```{r}
+penguinLongData<- penguins_raw %>% pivot_longer(cols = c("Culmen Length (mm)", "Culmen Depth (mm)","Flipper Length (mm)","Body Mass (g)"), names_to = "bodyMeasures", values_to= "measurements")
+```
 
+```{r}
+penguinWide<- penguinLongData %>% pivot_wider(id_cols = c("Individual ID", "Sample Number"), names_from = "bodyMeasures", values_from="measurements")
+```
+
+
+6. create two datasets. One should have the individual id, region, and island. The other should have individual id, species, flipper length, culmen length, culmen depth, and body mass. 
+
+```{r}
+penguinA<- penguins_raw %>% select("Individual ID", "Region", "Island")
+penguinB<- penguins_raw %>% select("Individual ID", "Culmen Length (mm)", "Culmen Depth (mm)","Flipper Length (mm)","Body Mass (g)")
 ```
 
 7. Join the two datasets you made together.
 ```{r}
-
+a<- left_join(penguinA, penguinB)
 ```
 
 8. Separate the species column into the common name and the scientific name 
 ```{r}
-
+penguins_raw$Species<- as.factor(penguins_raw$Species)
+levels(penguins_raw$Species)<- c("Adelie Penguin, Pygoscelis adeliae", "Chinstrap penguin, Pygoscelis antarctica","Gentoo penguin, Pygoscelis papua")
+b<-separate(penguins_raw,col = 'Species',into= c("commonName", "scientificName"), sep = ",")
 ```
 
 9. change the levels of clutch completion to indicate whether the penguin has two eggs or does not have two eggs
