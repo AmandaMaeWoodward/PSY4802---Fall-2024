@@ -74,6 +74,7 @@ a<- left_join(penguinA, penguinB)
 8. Separate the species column into the common name and the scientific name 
 ```{r}
 penguins_raw$Species<- as.factor(penguins_raw$Species)
+
 levels(penguins_raw$Species)<- c("Adelie Penguin, Pygoscelis adeliae", "Chinstrap penguin, Pygoscelis antarctica","Gentoo penguin, Pygoscelis papua")
 b<-separate(penguins_raw,col = 'Species',into= c("commonName", "scientificName"), sep = ",")
 ```
@@ -81,18 +82,38 @@ b<-separate(penguins_raw,col = 'Species',into= c("commonName", "scientificName")
 9. change the levels of clutch completion to indicate whether the penguin has two eggs or does not have two eggs
 
 ```{r}
+penguins_raw$`Clutch Completion2`<- penguins_raw$`Clutch Completion`=="Yes"
 
+penguins_raw %>% select(`Clutch Completion2`, `Clutch Completion`)
+
+#or
+penguins_raw$`Clutch Completion`<- as.factor(penguins_raw$`Clutch Completion`)
+
+levels(penguins_raw$`Clutch Completion`)<- c("not two eggs", "two eggs")
+levels(penguins_raw$`Clutch Completion`)
 ```
 
 10. create a column that has body mass in kilograms.
 
 ```{r}
+penguins_raw$bodymassKG<- penguins_raw$`Body Mass (g)`/1000
+
+#or
+penguins_raw$kgi<- NA
+for(i in 1:nrow(penguins_raw)){
+  penguins_raw$kgi[i]<- penguins_raw$`Body Mass (g)`[i]/1000
+}
+
+#or 
+bodymass2<- penguins_raw %>% mutate(kilograms=`Body Mass (g)`/1000)
 
 ```
 
 11. copy island to a new column. Recode this variable so that each island is renamed to be just the first initial
 
 ```{r}
-
+penguins_raw$island2<- as.factor(penguins_raw$Island)
+levels(penguins_raw$island2)
+penguins_raw$island2<- car::recode(penguins_raw$island2, recodes= "'Biscoe'= 'B'; 'Dream'='D'; 'Torgersen'= 'T'",separator = ";")
 ```
 
