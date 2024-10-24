@@ -305,41 +305,66 @@ ggplot(mtcars, aes(mpg, hp, color=as.factor(cyl)))+ geom_point()+geom_smooth(met
 ####Practice: 
 1. Create a scatter plot of the table and carat variables. 
 ```{r}
-
+ggplot(diamonds, aes(carat,table))+ geom_point()
 ```
 2. Change the color of the points to your favorite color. 
 ```{r}
+ggplot(diamonds, aes(carat,table))+ geom_point(color="navy")
 
 ```
 3. Change the shape of the points. 
 ```{r}
-
+ggplot(diamonds, aes(carat,table))+ geom_point(color="navy", shape = 4)
 ```
 4. Add a line of best fit to your scatter plot. 
 ```{r}
-
+ggplot(diamonds, aes(carat,table))+ geom_point(color="navy", shape = 4)+ geom_smooth(method="lm", se=FALSE)
 ```
 
 **Line graphs**
 Line graphs follow a similar to scatterplots, but use the geom_line function. Color customizations follow the same rules as scatterplots. 
 include group in aes
 ```{r}
-
+ggplot(diamonds, aes(carat, price)) + geom_line()+ theme_classic()
 ```
+
+```{r}
+ggplot(mtcars, aes(mpg, hp))+ geom_point()+theme_classic()
+
+ggplot(mtcars, aes(mpg, hp))+ geom_line()+theme_classic()
+```
+#cyl
+```{r}
+ggplot(mtcars, aes(mpg, hp, group=cyl))+ geom_line(aes(color=cyl))+theme_classic()
+```
+
+
 I won't talk as much about these graphs, but happy to answer questions. 
 
 **Box plots**
 I hope that the pattern is starting to make sense, but the only difference with a box plot is that you'll use `geom_boxplot()`. 
 ```{r}
-
-```
-
-```{r twoVariableBoxplot}
-
+ggplot(diamonds, aes(price))+ geom_boxplot()+theme_apa()
 ```
 
 ```{r}
+ggplot(diamonds, aes(price))+ geom_boxplot(fill= "slategrey", color= "midnightblue", alpha= .5)+theme_apa()#+ geom_vline(xintercept= mean(diamonds$price), color="blue", size=1)
+```
 
+```{r twoVariableBoxplot}
+ggplot(diamonds, aes(clarity, price))+ geom_boxplot()+theme_apa()
+```
+
+```{r}
+ggplot(mtcars, aes(mpg))+ geom_boxplot()
+```
+
+```{r}
+ggplot(mtcars, aes(mpg, as.factor(cyl)))+ geom_boxplot()+geom_jitter(alpha=.4)
+```
+
+```{r}
+ggplot(mtcars, aes(mpg, as.factor(cyl)))+ geom_violin()+geom_jitter(alpha=.4)
 ```
 
 ### Practice: 
