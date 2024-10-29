@@ -19,17 +19,19 @@ It can also be helpful to understand how to modify your legend:
 Let's try this on a graph from the diamonds dataset: 
 Create a subset of the diamonds dataset:
 ```{r}
-
+library(tidyverse)
+data(diamonds)
+ggplot(diamonds, aes(carat, price, color=cut))+ geom_point()+ theme(legend.position="none")
 ```
 
 We can also change the location: 
 ```{r}
-
+ggplot(diamonds, aes(carat, price, color=cut))+ geom_point()+ theme(legend.position="bottom")
 ```
 
 To Change the legend title, you can use a couple of different codes, depending on the type of data: 
-`scale_color_discrete(name="Title")` works for scatter plots filled in with a factor
-`scale_fill_discrete(name="Title)` should work for a bar graph filled in by a factor
+`scale_color_manual(name="Title")` works for scatter plots filled in with a factor
+`scale_fill_manual(name="Title)` should work for a bar graph filled in by a factor
 `scale_color_continuous()` and `scale_fill_continuous()` should work for a numeric fill
 ```{r}
 
@@ -62,7 +64,14 @@ Facet Wrap allows us to incorporate a third variable in another way. Specificall
 
 we need to make a graph and save it (we'll use carat and price)
 ```{r}
+mpgByCyl<- mtcars %>% 
+  group_by(cyl)%>%
+  summarize(mean= mean(mpg))
 
+ggplot(mpgByCyl, aes(cyl, mean))+ geom_bar(stat="identity")
+
+mpg<-ggplot(mtcars, aes(mpg))+ geom_bar() 
+mpg+facet_wrap(~cyl)
 ```
 then we'll use cut to create the facets
 ```{r}
