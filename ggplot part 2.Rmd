@@ -41,22 +41,26 @@ To Change the legend title, you can use a couple of different codes, depending o
 
 1) make a graph of disp and hp from mtcars. Include miles per gallon as a third variable
 ```{r}
-
+library(viridis)
+data(mtcars)
+ggplot(mtcars, aes(disp, hp, color= mpg))+ geom_point()+ scale_color_viridis(discrete=FALSE, option="inferno")+ theme_classic() 
 ```
 
 2) Move the legend to the top of the graph
 ```{r}
+ggplot(mtcars, aes(disp, hp, color= mpg))+ geom_point()+ scale_color_viridis(discrete=FALSE, option="inferno")+ theme_classic()+ theme(legend.position="top") 
 
+ggplot(mtcars, aes(disp, hp, color= mpg))+ geom_point()+ scale_color_viridis(discrete=FALSE, option="inferno")+ theme_classic()+ theme(legend.position="bottom")
 ```
 
 3) Remove the legend from the graph 
 ```{r}
-
+ggplot(mtcars, aes(disp, hp, color= mpg))+ geom_point()+ scale_color_viridis(discrete=FALSE, option="inferno")+ theme_classic()+ theme(legend.position="none")
 ```
 
 4) Change the title of the legend
 ```{r}
-
+ggplot(mtcars, aes(disp, hp, color= mpg))+ geom_point()+ scale_color_viridis(discrete=FALSE, option="inferno", name= "Miles Per  Gallon")+ theme_classic()+ theme(legend.position="top")
 ```
 
 ### Learning Outcome 2: Describe how to use facet wrap
@@ -70,22 +74,29 @@ mpgByCyl<- mtcars %>%
 
 ggplot(mpgByCyl, aes(cyl, mean))+ geom_bar(stat="identity")
 
-mpg<-ggplot(mtcars, aes(mpg))+ geom_bar() 
-mpg+facet_wrap(~cyl)
-```
-then we'll use cut to create the facets
-```{r}
+ggplot(mtcars, aes(mpg))+ geom_histogram(bins= 5, fill= "blue") + facet_wrap(~cyl)+ylab(label = "frequency") + xlab(label= "miles per gallon")
 
 ```
 
 ```{r}
+# option 1
+mtcars$cyl<- as.factor(mtcars$cyl)
+levels(mtcars$cyl)<- c("4 cylinders", "6 cylinders", "8 cylinders")
+ggplot(mtcars, aes(mpg))+ geom_histogram()+ facet_wrap(~cyl)
 
+#2 option
+labels<- c("4"="4 cylinders", "6"= "6 cylinders","8"=  "8 cylinders")
+data(mtcars)
+ggplot(mtcars, aes(mpg))+ geom_histogram(bins= 5, fill= "blue")+ facet_wrap(~cyl, labeller= as_labeller(labels))
 ```
 
 ### Practice: 
 1) create a facet wrap graph to generate a scatterplot of mpg and hp based on the number of cylinders a car has
 ```{r}
+prettyGraph <- ggplot(mtcars, aes(mpg, hp, color=as.factor(cyl)))+ geom_point()+ facet_wrap(~cyl, labeller= as_labeller(labels))+ theme_classic()+ ylab(label="Horse Power")+ xlab(label= "Miles per Gallon")+ scale_color_viridis(discrete=TRUE, option = "D")
 
+prettyGraph + theme(legend.position= "none", text = 
+element_text(family = "Times New Roman",size = 18))
 ```
 
 ### Learning Outcome 3: Explain how to export graphs
