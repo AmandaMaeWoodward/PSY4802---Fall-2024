@@ -20,8 +20,21 @@ We'll simulate data to use throughout today's class:
 To do this, we'll use a couple of functions we've used before: `set.seed()`, `rep()`, and `sample()`
 
 **Question**: What research question do we want to focus on? 
-```{r}
 
+What factors are related to the number of penguins born in a year? 
+
+```{r}
+#n = 1000 
+set.seed(137)
+#rnorm(1)
+penguinsBorn<- sample(14400:(14400*10),size =1000, replace=TRUE)
+year<- as.factor(1024:2024)
+temperature<- sample(-40:50, 1000, replace=TRUE)#quantitative
+fishAvailable<- sample(50000:1000000, 1000, replace=TRUE)#quantitative
+polarbearPresence<- sample(c("yes", "no"), 1000, replace=TRUE, prob = c(.65,.35))#qualitative yes or no
+emotionsOfPenguins<- sample(c("dangerously depressed", "very sad", "moderately sad", "neutral", "moderately happy", "very happy", "dangerously happy"), 1000, replace=TRUE)#ordinal
+region<- sample(c("Southern Africa", "Oceania", "Antarctica", "South America"), 1000, replace= TRUE)#qualitative
+ratioOfPenguins<- rnorm(1000, mean=.5, sd= .1)#quantitative 0=all male; 1= all female 
 ```
 
 
