@@ -26,9 +26,8 @@ What factors are related to the number of penguins born in a year?
 ```{r}
 #n = 1000 
 set.seed(137)
-#rnorm(1)
 penguinsBorn<- sample(14400:(14400*10),size =1000, replace=TRUE)
-year<- as.factor(1024:2024)
+year<- as.factor(1025:2024)
 temperature<- sample(-40:50, 1000, replace=TRUE)#quantitative
 fishAvailable<- sample(50000:1000000, 1000, replace=TRUE)#quantitative
 polarbearPresence<- sample(c("yes", "no"), 1000, replace=TRUE, prob = c(.65,.35))#qualitative yes or no
@@ -37,6 +36,10 @@ region<- sample(c("Southern Africa", "Oceania", "Antarctica", "South America"), 
 ratioOfPenguins<- rnorm(1000, mean=.5, sd= .1)#quantitative 0=all male; 1= all female 
 ```
 
+## create data frame
+```{r}
+penguinData<- cbind.data.frame(year, penguinsBorn, polarbearPresence, fishAvailable,emotionsOfPenguins,temperature,region, ratioOfPenguins)
+```
 
 ### Learning Outcome 1: Obtaining descriptive statistics in R
 We've gone through some of these already, but I want to make sure we're on the same page. For descriptive statistics, we'll mostly focus on the measures of central tendency and measures of variability. 
