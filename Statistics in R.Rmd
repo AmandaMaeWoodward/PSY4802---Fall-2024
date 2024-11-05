@@ -48,14 +48,29 @@ We've gone through some of these already, but I want to make sure we're on the s
 
 ##### Mean 
 ```{r}
-
+mean(penguinData$fishAvailable)
 ```
 ##### Median
 ```{r}
-
+median(penguinData$fishAvailable)
 ```
 ##### Mode
 ```{r}
+mode(penguinData$fishAvailable)# not correct
+library(modeest)
+mfv(penguinData$fishAvailable)
+```
+
+```{r}
+library(tidyverse)
+penguinData %>%
+  dplyr::summarize(meanFish= mean(fishAvailable), medianFish= median(fishAvailable))
+```
+
+```{r}
+penguinData %>%
+  dplyr::group_by(as.factor(region))%>%
+  dplyr::summarize(meanFish= mean(fishAvailable), medianFish= median(fishAvailable))
 
 ```
 
@@ -63,27 +78,32 @@ We've gone through some of these already, but I want to make sure we're on the s
 
 ##### Range
 ```{r}
+range(penguinData$fishAvailable)
+999762-50533
+range(penguinData$fishAvailable)[2]- range(penguinData$fishAvailable)[1]
+
 
 ```
 
 ##### Interquartile Range
 ```{r}
-
+IQR(penguinData$fishAvailable)
 ```
 
 ##### Standard Deviation
 ```{r}
-
+sd(penguinData$fishAvailable)
 ```
 
 ##### Variance
 ```{r}
-
+sd(penguinData$fishAvailable)^2
+var(penguinData$fishAvailable)
 ```
 
 ##### Summary
 ```{r}
-
+summary(penguinData$fishAvailable)
 ```
 
 #### Z Score
@@ -91,7 +111,7 @@ We've gone through some of these already, but I want to make sure we're on the s
 The other thing that we'll put in this section is how to create a z score in your data. This allows us to view one score relative to others, even if they are collected from different distributions
 
 ```{r}
-
+scale(penguinData$fishAvailable)
 ```
 
 ##### Learning Outcome 1 Practice
