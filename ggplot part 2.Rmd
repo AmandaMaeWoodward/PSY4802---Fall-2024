@@ -95,7 +95,7 @@ ggplot(mtcars, aes(mpg))+ geom_histogram(bins= 5, fill= "blue")+ facet_wrap(~cyl
 ```{r}
 prettyGraph <- ggplot(mtcars, aes(mpg, hp, color=as.factor(cyl)))+ geom_point()+ facet_wrap(~cyl, labeller= as_labeller(labels))+ theme_classic()+ ylab(label="Horse Power")+ xlab(label= "Miles per Gallon")+ scale_color_viridis(discrete=TRUE, option = "D")
 
-prettyGraph + theme(legend.position= "none", text = 
+finalPrettyGraph<-prettyGraph + theme(legend.position= "none", text = 
 element_text(family = "Times New Roman",size = 18))
 ```
 
@@ -104,10 +104,12 @@ to export graphs, I use the command `ggsave()`
 Specifically, you can use the following arguments: 
 `ggsave("name of graph", width, height, units, dpi)`
 ```{r}
+ggsave("PSY4802-FinalPrettyGraph.tiff", width= 16, height= 10, units = "in", dpi= 300)
 
 ```
 I don't usually specify a path in ggsave, but make sure my r code is in the directory I'd like it to be saved in. you can check your working directory by using this code
 ```{r}
+getwd()
 
 ```
 you can change your working directory using this code: 
