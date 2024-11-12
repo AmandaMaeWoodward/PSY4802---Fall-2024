@@ -117,23 +117,32 @@ scale(penguinData$fishAvailable)
 ##### Learning Outcome 1 Practice
 1) calculate the mean, median, and mode for any data in the our Dataset
 ```{r}
+mean(penguinData$penguinsBorn)
+median(penguinData$penguinsBorn)
+mfv(penguinData$penguinsBorn)
 
 ```
 
 2) what do you notice about these scores? (are they the same? different?)
 
+```{r}
+ggplot(penguinData, aes(penguinsBorn))+geom_histogram(fill="limegreen", bins =10)+ geom_freqpoly(bins=10)
+
+ggplot(penguinData, aes(penguinsBorn))+ geom_density()+ scale_y_continuous(limits= c(0,0.00005))
+```
+
 3) create z scores for any data in our Dataset. Interpret what participant 3's z score means. 
 ```{r}
-
+scale(penguinData$penguinsBorn)
 ```
 
 ```{r}
-
+scale(penguinData$penguinsBorn)[3]
 ```
 
  *Challenge* Graph your data and include the mean median and mode on the graph 
 ```{r}
-
+ggplot(penguinData,aes(penguinsBorn))+ geom_boxplot()+ geom_vline(xintercept= mean(penguinData$penguinsBorn), color="red")+ geom_vline(xintercept= mfv(penguinData$penguinsBorn), color="purple")
 ```
 
 ### Learning Outcome 2: Conduct common parametric analyses in R
@@ -141,32 +150,34 @@ scale(penguinData$fishAvailable)
 Now that we have covered some descriptive statistics, we'll talk about parametric ones. Parametric statistics are those that rely on assumptions to make inferences from the sample to the population. We'll go through correlations, t-tests, regression, and ANOVA. We'll go through nonparametric tests, or those that rely on less assumptions, in the next section. 
 
 #### Pearson correlation
-We'll practice running correlations using the dataset above. To do this, we'll look at the correlation between price and rating. 
+We'll practice running correlations using the dataset above. To do this, we'll look at the correlation between fishavailable and temperature
 `cor(x, y)`
 ```{r}
-
+cor(penguinData$fishAvailable, penguinData$temperature)
 ```
 **Note:** It's great that we can see the correlation between these two measures, but we don't have any additional information, ie information related to significance.We can use another function, `cor.test()`, to get information about significance.
 `cor.test(x,y)`
 ```{r}
-
+cor.test(penguinData$fishAvailable, penguinData$temperature)
 ```
 graph
 ```{r}
-
+ggplot(penguinData, aes(fishAvailable, temperature))+ geom_point()+ theme_classic()
 ```
 
-We can change whether we our conducting a one tailed or a two tailed test by including an additional argument "alternative." It defaults to a two tailed test, but we can specify a one tailed test in either direction ("greater" or "less") 
+We can change whether we our conducting a one tailed or a two tailed test by including an additional argument "alternative." It defaults to a two tailed test, but we can specify a one tailed test in either direction ("greater" or "less"). The default is "two.sided" 
 ```{r}
-
+cor.test(penguinData$fishAvailable, penguinData$temperature, alternative= "greater")
 ```
 
 ### Extra Code about Correlation Tables 
 `cor()` can also be used to create correlation matrices, but need to create a dataframe that is just the variables you'd like to use. 
 `cor(data)`
 ```{r}
-
+penguinsQuant<- penguinData %>% select(fishAvailable, temperature, penguinsBorn)
+cor(penguinsQuant)
 ```
+for heat map of correlations see: http://www.sthda.com/english/wiki/ggplot2-quick-correlation-matrix-heatmap-r-software-and-data-visualization 
 
 #### t-tests
 We can run a variety of t-tests using the same function `t.test()`. 
@@ -175,13 +186,17 @@ We can run a variety of t-tests using the same function `t.test()`.
 A one sample t test can be computed by specifying mu in the arguments. 
 `t.test(variable, mu)`
 ```{r}
+t.test(penguinData$temperature, mu= 0)
+t.test(penguinData$temperature, mu= 0, alternative= "less")
 
 ```
 
 ##### two samples t-test
 There are two ways we can use this function when we have two variables (independent or paired). The first is to type our x and y variables in as we did in the correlation function above. 
 ```{r}
-
+#t.test(DV ~ IV, data= datset)
+#t.test(group1, group2)
+t.test(temperature~ polarbearPresence, data=penguinData)
 ```
 You'll notice that the top of the t-test output says "Welch's Two sample t-test." This R function automatically assumes that the variances of each group are unequal. If we wanted to run a traditional paired-samples t-test, we need to include another argument. 
 
@@ -190,39 +205,44 @@ we can type them in as a formula in R. Formulas typically take the form y ~ x. T
 `t.test(dependent variable ~ indepedent variable, data= dataframe)`
 
 ```{r}
+t.test(temperature~ polarbearPresence, data=penguinData, var.equal=TRUE)
 
 ```
 If our data were dependent between observations, we'll run a paired samples t test. The code looks pretty similar to above, but we'll use an additional argument. 
 
 let's use the sleep datset as an example
 ```{r}
+summary(as.factor(penguinData$polarbearPresence))
+data(sleep)
+class(sleep$group)
+class(sleep$extra)
+t.test(extra~ group, data=sleep, paired=TRUE)
 
+t.test(sleep$extra[sleep$group==1], sleep$extra[sleep$group==2], paired=TRUE)
 ```
 
 Finally, we some times run one tailed vs two tailed tests, just like we did with the correlations. 
-```{r}
-
-```
 
 ##### Correlation and T-test practice
 1. Open the mtcars dataset. Find the correlation between mpg and hp
 ```{r}
-
+data(mtcars)
+cor(mtcars$mpg, mtcars$hp)
 ```
 
 2. Conduct a significance test to determine if displacement and miles per gallon significantly correlated. 
 ```{r}
-
+cor.test(mtcars$disp, mtcars$mpg)
 ```
 
 3. Conduct a two-tailed t-test examining whether the average mpg differs by transmission (am). 
 ```{r}
-
+t.test(mpg~am, data=mtcars)
 ```
 
 4. Conduct a one-tailed t-test examining whether the average displacement(disp) differs engine shape (vs). Specifically, test whether straight engines result in higher displacements.
 ```{r}
-
+t.test(disp~ vs, data=mtcars, alternative= "less")
 ```
 
 
@@ -230,76 +250,112 @@ Finally, we some times run one tailed vs two tailed tests, just like we did with
 Back to the simulated Dataset we made. The code for a linear regression is really similar (ie identical)  to what we used for t-tests.
 `lm(DV ~ IV, data)`
 ```{r}
+lm(penguinsBorn ~ fishAvailable, data= penguinData)
 
 ```
 I tend to save my linear models because it allows me to do a few useful things:
 Just like we used   `summary()` to get a summary of our data, we can use the same function to learn more about our models
 ```{r}
+penguinBornRegression<- lm(penguinsBorn~ fishAvailable, data= penguinData)
 
+summary(penguinBornRegression)
 ```
 `str()` is a function that allows us to learn about the structure of our model. We can use this to get specific pieces of information, or additional information that "underlies" our model (eg residuals and fitted values)
 ```{r}
+str(penguinBornRegression)
 
+penguinBornRegression$coefficients
+
+penguinBornRegression$model$penguinsBorn #can use more than one dollar sign 
 ```
 
 **Multiple Regression**
 We can include additional factors and interaction terms to our models: 
 
 ```{r}
+penguinsBornMult<- lm(penguinsBorn ~ fishAvailable + temperature, data= penguinData)
 
+summary(penguinsBornMult)
 ```
 Using * instead of + will include both the individual predictors AND their interactions
 ```{r}
+penguinsBornMultInteraction<- lm(penguinsBorn ~ fishAvailable * temperature, data= penguinData)
+
+summary(penguinsBornMultInteraction)
 
 ```
  
 The : can be used instead of + to include an interaction in your model
 ```{r}
+lm(penguinsBorn~ fishAvailable + polarbearPresence+temperature + fishAvailable:temperature, data=penguinData)
 
+lm(penguinsBorn~ fishAvailable*temperature*polarbearPresence, data= penguinData)
 ```
 
 The class of our data and the way data are entered matter for regression models. 
-let's consider condition:
-
-Data don't really look continuous. We can change age to a factor. This will influence our output.  
 
 We may also need to change the reference level for factors.
-`relevel(dat$age, ref="x")`
+`relevel(dat$column, ref="x")`
 
+```{r}
+polarBearReg<- lm(penguinsBorn~ polarbearPresence, data=penguinData)
+summary(polarBearReg)
+
+```
 
 **Anova**
 There are several ways you can get Anova results in R. There are differences in the ways that they handle interactions, but they are used in the same way. We can use `aov()`, `anova()`, and `Anova()`
 
 ```{r}
+library(car)
+Anova(lm(penguinsBorn~ polarbearPresence, data=penguinData))
+
+polarBearANOVA<-aov(penguinsBorn~ polarbearPresence, data=penguinData)
+summary(polarBearANOVA)
 
 "post hoc test"
+TukeyHSD(polarBearANOVA) # don't really need a posthoc test here
 
+EmotionANOVA<- aov(penguinsBorn~ emotionsOfPenguins, data=penguinData)
+summary(EmotionANOVA)
+TukeyHSD(EmotionANOVA)
 "effect size"
 
+library(lsr)
+etaSquared(EmotionANOVA)
 ```
 
  more predictors!
 ```{r}
+EmotBearANOVA<-aov(penguinsBorn~ emotionsOfPenguins* polarbearPresence)
+summary(EmotBearANOVA)
+
 "multiple comparisons"
+multcompar<-TukeyHSD(EmotBearANOVA)
+multcompar$`emotionsOfPenguins:polarbearPresence`#allows you to just look at one set of multiple comparisons
 
+TukeyHSD(EmotBearANOVA, "polarbearPresence")
 "effectsize"
-
 ```
  
 #### Regression and ANOVA practice
 1. Use the mtcars dataset and create a linear model that predicts mpg from cylinder (cyl) and displacement. Print the results
-```{r}
 
+```{r}
+summary(lm(mpg~ cyl+ disp, data=mtcars))
+
+summary(lm(mpg~ as.factor(cyl)+disp, data=mtcars))
 ```
 
 2. Create the same model, but include an interaction term. 
 ```{r}
+summary(lm(mpg~ as.factor(cyl)*disp, data=mtcars))
 
 ```
 
 3. Run an ANOVA predicting hp from the transmission variable. 
 ```{r}
-
+summary(aov(hp~am, data=mtcars))
 ```
 
 ###Learning Outcome 3: Nonparametric analyses in R
@@ -308,20 +364,26 @@ Nonparametric analyses are run similarly to their parametric versions. In the in
 **biserial correlations**
 Biserial correlations involve a binary outcome and a continuous variable. To run one in R, we need the ltm package. 
 ```{r}
-
+library(ltm)
 ```
 the function is `biserial.cor(continuous, binary)`
 ```{r}
+biserial.cor(penguinData$penguinsBorn, penguinData$polarbearPresence, level=2)
 
+library(ggplot2)
+ggplot(penguinData, aes(penguinsBorn, polarbearPresence))+ geom_point()+geom_smooth(method="lm")
 ```
 Mathematically, this is the same as the pearson's version. 
 ```{r}
-
+cor(penguinData$penguinsBorn, penguinData$polarbearPresence)
 ```
 
 **spearman's rho**
 We can calculate spearman's rho and kendall's tau the same way. We just need to use the "method" argument for `cor.test()`
 ```{r}
+levels(as.factor(penguinData$emotionsOfPenguins))
+penguinData$emotionsQuant<- car::recode(penguinData$emotionsOfPenguins, recodes = "'dangerously depressed'= 1; 'dangerously happy'= 7; 'moderately happy' = 5; 'moderately sad'=3;'neutral'=4; 'very happy'= 6; 'very sad'= 2")
+cor.test(penguinData$penguinsBorn, penguinData$emotionsOfPenguins,method="spearman")
 
 ```
 
