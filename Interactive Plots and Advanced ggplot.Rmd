@@ -4,10 +4,93 @@ author: "Amanda Mae Woodward"
 date: "2024-10-23"
 output: html_document
 ---
-
+For today's learning outcomes, we'll cover:
+- plotting an interaction 
 - Identify Code to create a shiny app 
 
-### Learning Outcome 4: Identify Code to create a shiny app 
+### Learning Outcome 1: Plotting interactions
+Now that we've covered statistics and graphing, we can bring the two together to talk about interactions. We have a couple of options for how to do this, and I'll try to share a few of them as we go through this
+
+First, we need some data. For today, we'll just continue using our simulated data:
+```{r}
+#n = 1000 
+set.seed(137)
+#rnorm(1)
+penguinsBorn<- sample(14400:(14400*10),size =1000, replace=TRUE)
+year<- as.factor(1025:2024)
+temperature<- sample(-40:50, 1000, replace=TRUE)#quantitative
+fishAvailable<- sample(50000:1000000, 1000, replace=TRUE)#quantitative
+polarbearPresence<- sample(c("yes", "no"), 1000, replace=TRUE, prob = c(.65,.35))#qualitative yes or no
+emotionsOfPenguins<- sample(c("dangerously depressed", "very sad", "moderately sad", "neutral", "moderately happy", "very happy", "dangerously happy"), 1000, replace=TRUE)#ordinal
+region<- sample(c("Southern Africa", "Oceania", "Antarctica", "South America"), 1000, replace= TRUE)#qualitative
+ratioOfPenguins<- rnorm(1000, mean=.5, sd= .1)#quantitative 0=all male; 1= all female 
+```
+
+#create dataset
+```{r}
+penguinData<- cbind.data.frame(year, penguinsBorn, polarbearPresence, fishAvailable, emotionsOfPenguins, temperature, region, ratioOfPenguins) #fixed the error message by adding a year to the first part of the yeay (1024 to 1025) so there's the correct number of rows
+```
+
+
+#### Categorical variable x categorical variable
+In the case where we have two categorical predictors, there are a few options we have. We could graph the means: 
+
+load tidyverse
+```{r}
+library(tidyverse)
+````
+
+then, can create a table with means 
+```{r}
+
+```
+use this output to create a graph 
+
+```{r}
+
+```
+
+Alternatively, could use facet wrap with boxplots
+```{r}
+
+```
+
+Finally, could use ggeffects package. Need to load the library
+```{r}
+
+```
+
+Then, you can use the `ggpredict()` function to get predictions. We save these, and then use the `plot()` function to create an interaction plot
+```{r}
+
+```
+
+#### Categorical variable x continuous variable
+we've already talked about some ways to show these sorts of interactions
+
+using `facet wrap()`
+```{r}
+
+```
+
+using color 
+```{r}
+
+```
+
+using ggeffects package
+```{r}
+
+```
+
+#### continuous x continuous interaction
+using ggeffects package
+```{r}
+
+```
+
+
+### Learning Outcome 2: Identify Code to create a shiny app 
 ## Before we get started
 Shiny apps are advanced. Even if we're focusing on "basics" the coding behind it is more advanced than what we covered last week. It's **ok** if you walk away from the lesson not knowing what I'm talking about. 
 
