@@ -180,11 +180,13 @@ Before we look at the shiny app code, I need to walk you through the code we'll 
 
 first, we'll use rnorm. We can use this function to draw a random sample from a normal distribution (mean= 0, sd=1). 
 ```{r}
-
+set.seed(25)
+rnorm(32)
 ```
 We'll put this into a plot (which will let me show you a way to graph vectors not in a dataframe)
 ```{r}
-
+library(ggplot2)
+ggplot(,aes(rnorm(32)))+ geom_histogram()
 ```
 
 ```{r}
@@ -206,14 +208,70 @@ shinyApp(ui = ui, server = server)
 #### Practice (Challenge)
 1. Create a shiny app that allows people to select a number between 1 and 5000. 
 ```{r}
+ui <- fluidPage(
+  sliderInput(inputId = "number", 
+    label = "Pick a number", 
+    value = 2500, min = 1, max = 5000))
+server <- function(input, output) {}
+
+shinyApp(ui = ui, server = server)
 
 ```
 
 2. Add an output that creates a graph based on these numbers.
 ```{r}
+ui <- fluidPage(
+  sliderInput(inputId = "number", 
+    label = "Pick a number", 
+    value = 2500, min = 1, max = 5000), plotOutput("hist")
+)
+
+server <- function(input, output) {
+  output$hist <- renderPlot({
+    ggplot(, aes(rnorm(input$number)))+ geom_histogram(fill="midnightblue")+theme_classic()
+  })
+}
+
+shinyApp(ui = ui, server = server)
+
+```
+
+```{r}
+ui <- fluidPage(
+  sliderInput(inputId = "number", 
+    label = "Pick a number", 
+    value = 2500, min = 1, max = 5000), plotOutput("boxp")
+)
+
+server <- function(input, output) {
+  output$boxp <- renderPlot({
+    ggplot(, aes(rnorm(input$number)))+ geom_boxplot(fill="midnightblue")+theme_classic()
+  })
+}
+
+shinyApp(ui = ui, server = server)
 
 ```
 **Challenge:** Create a graph based on two numbers chosen by the user
+```{r}
+ui <- fluidPage(
+  sliderInput(inputId = "number1", 
+    label = "Pick a number", 
+    value = 2500, min = 1, max = 5000),sliderInput(inputId = "number2", 
+    label = "Pick a number", 
+    value = 2500, min = 1, max = 5000), plotOutput("scatterplot")
+)
+
+server <- function(input, output) {
+  output$scatterplot <- renderPlot({
+    ggplot(, aes(rnorm(input$number1), rnorm(input$number2)))+ geom_point(color="purple")+theme_classic()
+  })
+}
+
+shinyApp(ui = ui, server = server)
+
+
+```
 
 ### Using real data in a shiny app
 
@@ -230,7 +288,7 @@ data(diamonds)
 The first part we'll set up is the ui. We'll be making a drop down list. 
 
 To make a dropdown list, we'll use the selectInputs function. It takes the following arguments:
-selectInput(inputId, label (what other people see), choices(that people can choose from))
+`selectInput(inputId, label (what other people see), choices(that people can choose from))`
 ```{r}
 ui<- fluidPage(
   titlePanel("diamonds data"),
