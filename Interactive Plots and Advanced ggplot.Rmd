@@ -38,31 +38,36 @@ In the case where we have two categorical predictors, there are a few options we
 load tidyverse
 ```{r}
 library(tidyverse)
-````
+```
 
 then, can create a table with means 
 ```{r}
+lm1<- lm(penguinsBorn~ polarbearPresence*emotionsOfPenguins, data=penguinData)
 
+penguinPolarBearEmotion<- penguinData %>%
+  group_by(polarbearPresence, emotionsOfPenguins) %>%
+  summarise(meanPenguinsBorn= mean(penguinsBorn))
 ```
 use this output to create a graph 
 
 ```{r}
-
+ggplot(penguinPolarBearEmotion, aes(emotionsOfPenguins, meanPenguinsBorn, fill=polarbearPresence))+ geom_bar(stat="identity", position= position_dodge())
 ```
 
 Alternatively, could use facet wrap with boxplots
 ```{r}
-
+ggplot(penguinData, aes(emotionsOfPenguins, penguinsBorn, fill= polarbearPresence))+ geom_boxplot()+ facet_wrap(~polarbearPresence)
 ```
 
 Finally, could use ggeffects package. Need to load the library
 ```{r}
-
+library(ggeffects)
 ```
 
 Then, you can use the `ggpredict()` function to get predictions. We save these, and then use the `plot()` function to create an interaction plot
 ```{r}
-
+predict<- ggpredict(lm1, terms= c("polarbearPresence", "emotionsOfPenguins"))
+plot(predict)
 ```
 
 #### Categorical variable x continuous variable
@@ -70,23 +75,28 @@ we've already talked about some ways to show these sorts of interactions
 
 using `facet wrap()`
 ```{r}
+lm2<- lm(penguinsBorn~ polarbearPresence*fishAvailable, data=penguinData)
 
+ggplot(penguinData, aes(fishAvailable, penguinsBorn))+ facet_wrap(~polarbearPresence)+geom_point()+ geom_smooth(method="lm")
 ```
 
 using color 
 ```{r}
-
+ggplot(penguinData, aes(fishAvailable, penguinsBorn, color= polarbearPresence))+ geom_point()+geom_smooth(method="lm")
 ```
 
 using ggeffects package
 ```{r}
-
+predict2<- ggpredict(lm2, terms= c("fishAvailable","polarbearPresence"))
+plot(predict2)
 ```
 
 #### continuous x continuous interaction
 using ggeffects package
 ```{r}
-
+lm3<-lm(penguinsBorn~fishAvailable*temperature, data=penguinData)
+predict3<-ggpredict(lm3, terms=c("fishAvailable", "temperature"))
+plot(predict3)
 ```
 
 
@@ -105,7 +115,7 @@ People make shiny apps in different ways, I'm going to use naming conventions an
 
 But first, we need to load the shiny package. 
 ```{r}
-
+library(shiny)
 ```
 
 Before we start coding, we need to talk about the different aspects of a shiny app: 
